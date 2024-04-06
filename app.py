@@ -1,14 +1,14 @@
 from flask import Flask
-import form.register 
+from form import register_blueprint  
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "hello world"
+    return "Hello, World!"
 
-app.register_blueprint(blueprint)
+app.register_blueprint(register_blueprint)  
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     app.run(debug=True)
 

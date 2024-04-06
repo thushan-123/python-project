@@ -63,4 +63,4 @@ def get_into_predicition(user_txt):
     get_predect = get_predection(vectorized_user_txt)
     return get_predect
 
-print(get_into_predicition("i hate this product"))
+print(get_into_predicition("good"))
