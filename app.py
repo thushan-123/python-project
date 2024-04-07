@@ -1,4 +1,6 @@
 from flask import Flask
+import sys 
+sys.path.append("../")
 from form import register_blueprint  
 
 app = Flask(__name__)

@@ -1,25 +1,27 @@
 import psycopg2
+ 
 
+
+config = dotenv_values(".env")
 
 #  Connect to an existing database
-try:
-    conn = psycopg2.connect(
+conn = psycopg2.connect(
         host="localhost",
-        user="postgres",
+        user="postgre",
         password="thushan2001",
         dbname="python",
-        port="5432"
+        port=5432
     )
 
-    cursor = conn.cursor()
+    
 # error handling
-except Exception as e:  
-    print(f"Error: {e.args[0]}")  
+ 
 
 # users columns : id (primary key), f_name , l_name , address , mobile , password
 # articale  columns : artical_id (primary key), title ,artical_content ,artical_date , id (foreign key from users)
 # user_comment columns : comment_id (primary key) , comment_content , c_date , review (bool) ,artical_id(foreign key) ,user_id(foreigen key)
 
+cursor = conn.cursor()
 
 class insert :
      
@@ -79,6 +81,8 @@ class  update :
             return "{cursor.rowcount} rows affected."
         except Exception as e:
             return f"Failed to Update Data : {str(e)}"
+        
+
         
 
 

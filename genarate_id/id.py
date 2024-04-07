@@ -1,3 +1,5 @@
+import sys
+sys.path.append("../")
 from database import db
 
 def int_convert_len3_str(number):
@@ -16,18 +18,29 @@ def int_convert_len3_str(number):
 
 # genarate a user id  for new users.
 
-class user_id :
-    def gen_user_id(self):
-        retrive_class = db.retrive()
-        query = "SELECT MAX(id) FROM users"
-        get_last_user_id  = retrive_class.select_data(query)
-        user_id = get_last_user_id[0][0]
-        number = int(user_id[2:])+1
-        new_user_id = "FE" + int_convert_len3_str(number)
-        return new_user_id
 
-class articale:
-    def gen_art_id(self):
+def gen_user_id():
+    retrive_class = db.retrive()
+    query = "SELECT MAX(id) FROM users"
+    get_last_user_id = retrive_class.select_data(query)
+    last_user_id = get_last_user_id[0][0]
+
+    if last_user_id is None or not last_user_id.startswith("FE"):  
+        # If no user exists yet or the user ID is not in the expected format
+        new_user_id = "FE006"
+    else:
+        try:
+            number = int(last_user_id[2:]) + 1
+            new_user_id = "FE" + int_convert_len3_str(number)
+        except (TypeError, ValueError):
+            # Handle cases where the retrieved user ID is not in the expected format
+            # or cannot be converted to an integer
+            new_user_id = "FE006"  # Fallback to a default ID
+
+    return new_user_id
+
+
+def gen_art_id():
         retrive_class = db.retrive()
         query = "SELECT MAX(artical_id) FROM articale"
         get_last_artical_id  = retrive_class.select_data(query)
@@ -36,8 +49,8 @@ class articale:
         new_articale_id = "AT" + int_convert_len3_str(number)
         return new_articale_id
 
-class comment_id:
-    def gen_comm_id(self):
+
+def gen_comm_id():
         retrive_class = db.retrive()
         query = "SELECT MAX(comment_id) FROM user_comment"
         get_last_commnet_id= retrive_class.select_data(query)
@@ -46,4 +59,4 @@ class comment_id:
         return str(new_cmm_id)
         
 
-print(user_id().gen_user_id(),articale().gen_art_id(),comment_id().gen_comm_id())
+
