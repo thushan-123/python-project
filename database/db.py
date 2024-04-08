@@ -1,6 +1,6 @@
 import psycopg2
  
-
+import os
 
 config = dotenv_values(".env")
 
@@ -34,9 +34,9 @@ class insert :
         try :
             cursor.execute(query,values)
             conn.commit()
-            return "Data inserted successfully."
+            return "inserted successfully."
         except Exception as e:
-            return f"Failed to insert data :{str(e)} "
+            return ""
         
 # retrive data for the database : query is SQL query
 
@@ -48,7 +48,7 @@ class retrive :
             result = cursor.fetchall()
             return result
         except  Exception as e:
-            return f'error : {str(e)}'
+            return 'error'
         
 
 # delete from data for the database
@@ -58,9 +58,9 @@ class delete :
         try :
             cursor.execute(query)
             conn.commit()
-            return "Data deleted Successfully"
+            return "deleted Successfully"
         except Exception as e:
-            return f"Error in Deleting Data : {str(e)}"
+            return "error"
         
 # create table
 class create :
@@ -69,7 +69,7 @@ class create :
             cursor.execute(query)
             return "create a table sucessfully"
         except Exception as e:
-            return f"failed to create table : {str(e)}"
+            return f"error"
 
 # update  data into the database
 
@@ -80,7 +80,7 @@ class  update :
             conn.commit()
             return "{cursor.rowcount} rows affected."
         except Exception as e:
-            return f"Failed to Update Data : {str(e)}"
+            return "error"
         
 
         

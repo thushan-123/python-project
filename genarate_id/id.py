@@ -45,16 +45,27 @@ def gen_art_id():
         query = "SELECT MAX(artical_id) FROM articale"
         get_last_artical_id  = retrive_class.select_data(query)
         articale_id = get_last_artical_id[0][0]
-        number = int(articale_id[2:])+1
-        new_articale_id = "AT" + int_convert_len3_str(number)
-        return new_articale_id
-
+        if articale_id is None or not articale_id.startswith("FE"):  
+        # If no user exists yet or the user ID is not in the expected format
+            new_artical_id = "AT006"
+        else:
+            try:
+                number = int(articale_id[2:]) + 1
+                new_artical_id = "AT" + int_convert_len3_str(number)
+            except (TypeError, ValueError):
+                # Handle cases where the retrieved user ID is not in the expected format
+                # or cannot be converted to an integer
+                new_artical_id = "AT006"  # Fallback to a default ID
+        return new_artical_id
 
 def gen_comm_id():
         retrive_class = db.retrive()
         query = "SELECT MAX(comment_id) FROM user_comment"
         get_last_commnet_id= retrive_class.select_data(query)
-        commnet_id = int(get_last_commnet_id[0][0])
+        try:
+             commnet_id = int(get_last_commnet_id[0][0])
+        except :
+             commnet_id = 0
         new_cmm_id = commnet_id + 1
         return str(new_cmm_id)
         
