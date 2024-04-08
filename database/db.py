@@ -34,9 +34,9 @@ class insert :
         try :
             cursor.execute(query,values)
             conn.commit()
-            return "inserted successfully."
+            return "insert successfully."
         except Exception as e:
-            return ""
+            return e
         
 # retrive data for the database : query is SQL query
 
@@ -58,7 +58,7 @@ class delete :
         try :
             cursor.execute(query)
             conn.commit()
-            return "deleted Successfully"
+            return "delete Successfully"
         except Exception as e:
             return "error"
         

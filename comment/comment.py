@@ -17,19 +17,32 @@ comment = Blueprint('comment',__name__)
 def  user_comments():
     try :
         req = request.get_json()
+
         comment_id = id.gen_comm_id()
         token = req["token"]
         comment = req["comment"]
-        review = get_into_predicition(comment)
+        prediction = get_into_predicition(comment)
         date = req["date"]
-        user_id = req["user_id"]
         artical_id = req["artical_id"]
+
+        #validate token
         valied_token =is_token_valied(token, SERECT_KEY)
-        print(comment,review)
-        #if valied_token != False:
-        return "ok"
+        user_id =valied_token["user_id"]
+
+        print(comment_id,comment,prediction,date,user_id,artical_id)
+
+        if valied_token != False:
+            query = "INSERT INTO user_comment(comment_id,comment_content,c_date,artical_id,id,prediction) VALUES (%s,%s,%s,%s,%s,%s) "
+            values = (comment_id,comment,date,artical_id,user_id,prediction)
+            #call to method in db package
+            obj = db.insert()
+            result = obj.insert_data(query,values)
+            return jsonify({"status" : result})
+        else:
+            return jsonify({"error"}),403
 
 
 
     except Exception as e:
-        return jsonify({str(e)})
+        #return jsonify({str(e)})
+        abort(404)

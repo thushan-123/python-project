@@ -40,7 +40,55 @@ def add_artical():
         
 
     except Exception as e:
-       # return jsonify({"error": str(e)}) 
-       abort(404)
+        return jsonify({"error": str(e)}) 
+       #abort(404)
         
+@artical.route("/artical/all",methods=["GET","POST"])
+def get_all_articals():
+    try:
+        query = "SELECT * FROM  articale ORDER BY artical_date DESC"
+        obj = db.retrive()
+        result = obj.select_data(query)
+        result_set = []
+
+        for x in result:
+            # get a count of positive comment in each artical 
+            temp_query_p = f"SELECT COUNT(prediction) FROM user_comment WHERE artical_id = '{x[0]}' AND prediction = 'positive'"
+            # get a count of negative comment in each artical
+            temp_query_n = f"SELECT COUNT(prediction) FROM user_comment WHERE artical_id = '{x[0]}' AND prediction = 'negative'"
+
+            #get all comment in each artical
+            c_query = f"SELECT * FROM user_comment WHERE artical_id='{x[0]}' "
+            rows_comment = obj.select_data(c_query)
+            comment =[]
+            for i in rows_comment :
+                temp_comment ={"comment_id" : i[0],
+                               "content" : i[1],
+                               "c_date" : i[2],
+                               "user_id" : i[4],
+                               "prediction" : i[5]
+                               }
+                comment.append(temp_comment)
+            p_result = obj.select_data(temp_query_p)
+            n_result = obj.select_data(temp_query_n)
+            temp_result ={
+                          "artical_id" : x[0],
+                          "title" : x[1],
+                          "content" : x[2],
+                          "date" : x[3],
+                          "user_id" :x[4],
+                          "positive" :p_result[0][0],
+                          "negative" :n_result[0][0],
+                          "comments" : comment,
+                          }
+            result_set.append(temp_result)
+            
+
+        #print(result_set)
+        return jsonify(result_set)
+    except Exception as e :
+        return  jsonify({"error":str(e)})
     
+
+
+
