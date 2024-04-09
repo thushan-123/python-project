@@ -40,8 +40,8 @@ def add_artical():
         
 
     except Exception as e:
-        return jsonify({"error": str(e)}) 
-       #abort(404)
+        #return jsonify({"error": str(e)}) 
+        abort(404)
         
 @artical.route("/artical/all",methods=["GET","POST"])
 def get_all_articals():
@@ -87,8 +87,8 @@ def get_all_articals():
         #print(result_set)
         return jsonify(result_set)
     except Exception as e :
-        return  jsonify({"error":str(e)})
-    
+        #return  jsonify({"error":str(e)})
+        abort(404)
 
 
 
