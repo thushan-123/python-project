@@ -67,7 +67,7 @@ def gen_comm_id():
         except :
              commnet_id = 0
         new_cmm_id = commnet_id + 1
-        return str(new_cmm_id)
+        return new_cmm_id
         
 
 

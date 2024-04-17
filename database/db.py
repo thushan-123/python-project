@@ -1,6 +1,6 @@
 import psycopg2
  
-import os
+
 
 config = dotenv_values(".env")
 
@@ -14,7 +14,7 @@ conn = psycopg2.connect(
     )
 
     
-# error handling
+
  
 
 # users columns : id (primary key), f_name , l_name , address , mobile , password

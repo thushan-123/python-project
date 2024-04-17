@@ -1,4 +1,5 @@
 from flask import Blueprint , request , jsonify,abort
+from datetime import datetime
 import sys
 sys.path.append("../")
 
@@ -11,7 +12,7 @@ SERECT_KEY="i am king of 21"
 
 comment = Blueprint('comment',__name__)
 
-#add a comment  require token,comment,date,user_id,artical_id
+#add a comment  require token,comment,artical_id
 
 @comment.route("/user/comment", methods=[ "POST","GET"])
 def  user_comments():
@@ -22,7 +23,7 @@ def  user_comments():
         token = req["token"]
         comment = req["comment"]
         prediction = get_into_predicition(comment)
-        date = req["date"]
+        date = datetime.now()
         artical_id = req["artical_id"]
 
         #validate token
@@ -37,12 +38,13 @@ def  user_comments():
             #call to method in db package
             obj = db.insert()
             result = obj.insert_data(query,values)
-            return jsonify({"status" : result})
+            return jsonify({"status" : "sucess"})
         else:
             return jsonify({"error"}),403
 
 
 
     except Exception as e:
-        #return jsonify({str(e)})
-        abort(404)
+        print(str({e}))
+        return jsonify({"error" : str(e)})
+       # abort(404)

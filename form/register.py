@@ -56,7 +56,6 @@ def  login():
         try :
             data =obj.select_data(query)
             if len(data)>0:
-                #print(data[0][0],type(data),data[0][6])
                 id = data[0][0]
                 user = data[0][6] 
                 
@@ -67,9 +66,9 @@ def  login():
                 
                 return jsonify({"status":"ok","token":token})
             else:
-                return jsonify({"status":"error"})
+                return jsonify({"status":"error1"})
         except :
-            return jsonify({"status" : "error"})
+            return jsonify({"status" : "error2"})
 
     except :
         abort(404)

@@ -1,5 +1,5 @@
-from flask import Flask,session,abort
-from flask_session import Session
+from flask import Flask,abort
+from flask_cors import CORS
 import sys 
 sys.path.append("../")
 from form import register_blueprint  
@@ -9,9 +9,7 @@ from comment import comment
 
 app = Flask(__name__)
 
-SESSION_TYPE ="filesystem"
-app.config.from_object(__name__)
-Session(app)
+CORS(app)
 
 @app.route('/')
 def home():

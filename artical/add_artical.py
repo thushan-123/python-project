@@ -1,5 +1,6 @@
 from flask import Blueprint , request , jsonify,abort
 import sys
+from datetime import datetime
 sys.path.append("../")
 
 from database import db
@@ -10,7 +11,7 @@ SERECT_KEY="i am king of 21"
 
 artical = Blueprint('add_artical',__name__)
 
-#sent to data in json   token,title,content,date,
+#sent to data in json   token,title,content
 
 @artical.route( "/artical/add", methods=["POST"] )
 def add_artical():
@@ -21,7 +22,7 @@ def add_artical():
         valied_tk = is_token_valied(token,SERECT_KEY)
         title = req["title"]
         content = req["content"]
-        date = req["date"]
+        date = datetime.now()
         user_id =  valied_tk["user_id"]
 
         #check the valied user
@@ -33,14 +34,11 @@ def add_artical():
             #insert to data to db table articale table
             obj =db.insert()
             result = obj.insert_data(query,values)
-            return jsonify({"status": result})
+            return jsonify({"status":"sucess"})
         
-        return jsonify({"error":"Token not valid"}),403
-        
-        
+        return jsonify({"error":"Token not valid"}),403        
 
     except Exception as e:
-        #return jsonify({"error": str(e)}) 
         abort(404)
         
 @artical.route("/artical/all",methods=["GET","POST"])
@@ -83,12 +81,41 @@ def get_all_articals():
                           }
             result_set.append(temp_result)
             
-
-        #print(result_set)
         return jsonify(result_set)
     except Exception as e :
-        #return  jsonify({"error":str(e)})
-        abort(404)
+        print(str({e}))
+        abort(404) 
+
+# get selected artical details    json req artical_id
+
+@artical.route("/artical/select", methods=["POST","GET"])
+def get_selected_artical_details():
+    try:
+        data = request.get_json()
+        artical_id = data["artical_id"]
+        query = f"SELECT * FROM user_comment WHERE artical_id = '{artical_id}'"
+        obj =db.retrive()
+        result = obj.select_data(query)
+        comments =[]
+
+        if len(result) == 0:
+            return jsonify({"status" : "artical not found"})
+        
+        for x in result:
+            temp_result ={
+                "comment_id" : x[0],
+                "content" : x[1],
+                "c_date" : x[2],
+                "user_id" : x[4],
+                "prediction" : x[5]
+            }
+            comments.append(temp_result)
+
+        return jsonify(comments)
+     
+    except Exception as e:
+        abort (404)
+
 
 
 
